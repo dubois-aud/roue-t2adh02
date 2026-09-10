@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>La roue T2Adh02</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="entete">
+    <h1>La roue T2Adh02</h1>
+    <p class="squad">squad tout risques</p>
+    <p class="accroche">Qui commence ? Ajoutez les participants et lancez la roue.</p>
+  </header>
+
+  <main class="plateau">
+    <section class="zone-roue" aria-labelledby="titre-roue">
+      <h2 id="titre-roue" class="visuellement-cache">Roue</h2>
+
+      <div class="conteneur-roue">
+        <div class="fleche" aria-hidden="true"></div>
+        <canvas id="roue" width="620" height="620" role="img" aria-label="Roue des participants"></canvas>
+        <button id="bouton-centre" class="bouton-centre" type="button">Tourner</button>
+      </div>
+
+      <p id="resultat" class="resultat" role="status" aria-live="polite"></p>
+    </section>
+
+    <aside class="panneau" aria-labelledby="titre-panneau">
+      <h2 id="titre-panneau">Participants (<span id="compteur">0</span>)</h2>
+
+      <form id="formulaire-ajout" class="formulaire-ajout" autocomplete="off">
+        <label for="champ-nom" class="visuellement-cache">Nom du participant</label>
+        <input id="champ-nom" type="text" placeholder="Ajouter un nom" maxlength="24" required>
+        <button type="submit" class="bouton bouton-primaire">Ajouter</button>
+      </form>
+
+      <p id="erreur-ajout" class="erreur" role="alert"></p>
+
+      <ul id="liste-noms" class="liste-noms"></ul>
+
+      <p id="vide" class="vide">Aucun participant pour le moment.</p>
+
+      <div class="options">
+        <label class="option">
+          <input id="option-deselection" type="checkbox">
+          Désélectionner le gagnant après le tirage
+        </label>
+        <label class="option option-choix" for="choix-son">
+          Son de la roue
+          <select id="choix-son">
+            <option value="musique">Musique YouTube</option>
+            <option value="bloups">Bloups et klaxon</option>
+            <option value="aucun">Aucun</option>
+          </select>
+        </label>
+      </div>
+
+      <div id="lecteur" class="lecteur" hidden>
+        <div class="lecteur-cadre">
+          <div id="lecteur-youtube"></div>
+        </div>
+        <p id="etat-son" class="etat-son" role="status" aria-live="polite"></p>
+      </div>
+
+      <div class="actions">
+        <button id="bouton-reselection" class="bouton bouton-large" type="button" hidden>Tout resélectionner</button>
+        <button id="bouton-melanger" class="bouton" type="button">Mélanger</button>
+        <button id="bouton-vider" class="bouton bouton-danger" type="button">Tout effacer</button>
+        <button id="bouton-lien" class="bouton bouton-large" type="button">Copier le lien de la roue</button>
+      </div>
+
+      <p id="retour-lien" class="retour-lien" role="status" aria-live="polite"></p>
+    </aside>
+  </main>
+
+  <div id="fenetre" class="fenetre" hidden>
+    <div class="fenetre-boite" role="dialog" aria-modal="true" aria-labelledby="fenetre-titre">
+      <p class="fenetre-sur-titre">Le sort a choisi</p>
+      <p id="fenetre-titre" class="fenetre-nom"></p>
+      <div class="fenetre-actions">
+        <button id="fenetre-deselection" class="bouton" type="button">Désélectionner</button>
+        <button id="fenetre-fermer" class="bouton bouton-primaire" type="button">Continuer</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

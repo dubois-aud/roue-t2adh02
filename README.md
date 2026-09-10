@@ -35,7 +35,7 @@ Trois modes dans la liste `Son de la roue`, le choix est retenu dans le `localSt
 L'identifiant est la constante `PLAYLIST` en tête de `script.js`. Il peut aussi être surchargé sans toucher au code par le paramètre `p` dans le fragment de l'URL, à côté de la liste des noms :
 
 ```
-#l=Audrey|Amine|Jean-Philippe&p=PL...
+#l=Audrey~Amine~Jean-Philippe&p=PL...
 ```
 
 La lecture passe par le lecteur officiel de YouTube (IFrame Player API), chargé à la demande, uniquement quand le mode musique est actif : aucune requête vers YouTube dans les deux autres modes. Le flux reste servi par YouTube, avec ses publicités et son décompte de vues, et aucun fichier audio n'est copié dans le dépôt.
@@ -56,7 +56,7 @@ Conséquence : `VIDEO_SECOURS` est laissée à `null` et le mode musique bascule
 Pour vérifier si une piste candidate est intégrable, le menu de partage de YouTube ne prouve rien. La méthode fiable est de la charger dans une iframe nue : si elle affiche « Vidéo non disponible », elle ne servira dans aucun lecteur intégré. On peut aussi l'essayer sans toucher au code par le paramètre `v` de l'URL :
 
 ```
-#l=Audrey|Amine&v=<identifiant>
+#l=Audrey~Amine&v=<identifiant>
 ```
 
 La lecture est déclenchée dans le gestionnaire du clic ou de la touche qui lance la roue, ce que réclame la politique de lecture automatique des navigateurs. Au premier lancement, si le lecteur n'est pas encore prêt, un message invite à relancer la roue.
@@ -75,7 +75,9 @@ Au premier chargement, quand la clé n'existe pas encore, la roue est amorcée a
 
 ### Lien partageable
 
-La liste est aussi encodée dans le fragment de l'URL, sous la forme `#l=Audrey|Amine|Jean-Philippe` avec chaque nom passé à `encodeURIComponent`. Les désélectionnés suivent dans un second paramètre, `&d=Audrey`, et la playlist éventuelle dans un troisième, `&p=`. Le fragment est mis à jour à chaque modification via `history.replaceState`, sans polluer l'historique de navigation.
+La liste est aussi encodée dans le fragment de l'URL, sous la forme `#l=Audrey~Amine~Jean-Philippe` avec chaque nom passé à `encodeURIComponent`. Les désélectionnés suivent dans un second paramètre, `&d=Audrey`, et la playlist éventuelle dans un troisième, `&p=`. Le fragment est mis à jour à chaque modification via `history.replaceState`, sans polluer l'historique de navigation.
+
+Le séparateur est le `~`, un caractère non réservé de la RFC 3986. Les premiers liens utilisaient le `|`, qui n'est pas valide dans une URL : selon le client, il ressortait en `%7C`, et la roue lisait alors un seul nom tronqué à 24 caractères, ou bien le lien était coupé au premier nom. Le `|` et le `%7C` restent acceptés à la lecture pour que les liens déjà envoyés continuent de fonctionner.
 
 Conséquences pratiques :
 

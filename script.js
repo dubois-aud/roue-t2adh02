@@ -124,12 +124,22 @@
     });
   }
 
+  /* Separateur ~ : caractere non reserve de la RFC 3986, donc jamais reencode
+     par un navigateur ni coupe par un client de messagerie. Le | des premiers
+     liens partages ressortait tantot brut, tantot en %7C, ce qui donnait un
+     seul nom tronque, ou un lien coupe au premier nom. */
+  var SEPARATEUR = '~';
+
   function encoder(valeurs) {
-    return valeurs.map(encodeURIComponent).join('|');
+    return valeurs.map(function (valeur) {
+      // encodeURIComponent laisse ~ intact, on le protege a la main
+      return encodeURIComponent(valeur).replace(/~/g, '%7E');
+    }).join(SEPARATEUR);
   }
 
   function decouper(brut) {
-    return brut.split('|').map(function (morceau) {
+    // | et %7C restent acceptes pour que les liens deja envoyes fonctionnent
+    return brut.split(/~|\||%7C/i).map(function (morceau) {
       try {
         return decodeURIComponent(morceau);
       } catch (e) {

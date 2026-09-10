@@ -372,18 +372,32 @@
   }
 
   function etiquette(texte, centre, rayon, angle, secteur, taille) {
-    var largeurMax = rayon * 0.62;
-    var police = Math.min(taille * 0.042, secteur * rayon * 0.55);
-    police = Math.max(police, 9);
+    // le texte court du moyeu vers le bord, sans empieter sur le bouton central
+    var largeurMax = rayon * 0.66;
+    var policeMax = Math.max(Math.min(taille * 0.040, secteur * rayon * 0.55), 9);
+    var policeMin = Math.max(policeMax * 0.6, 8);
 
     ctx.save();
     ctx.translate(centre, centre);
     ctx.rotate(angle);
     ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
-    ctx.font = '700 ' + Math.round(police) + 'px "Segoe UI", Arial, sans-serif';
     ctx.fillStyle = '#12151d';
 
+    function poser(police) {
+      ctx.font = '700 ' + police.toFixed(1) + 'px "Segoe UI", Arial, sans-serif';
+    }
+
+    /* un nom long rapetisse tout seul plutot que d imposer sa taille a
+       toute la roue : Francois-Xavier maigrit, Amine reste lisible de loin */
+    var police = policeMax;
+    poser(police);
+    while (police > policeMin && ctx.measureText(texte).width > largeurMax) {
+      police -= 0.5;
+      poser(police);
+    }
+
+    // au plancher et toujours trop long : la coupe reste le dernier recours
     var affiche = texte;
     while (affiche.length > 2 && ctx.measureText(affiche).width > largeurMax) {
       affiche = affiche.slice(0, -1);

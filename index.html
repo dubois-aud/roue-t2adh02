@@ -46,21 +46,10 @@
           <input id="option-deselection" type="checkbox">
           Désélectionner le gagnant après le tirage
         </label>
-        <label class="option option-choix" for="choix-son">
-          Son de la roue
-          <select id="choix-son">
-            <option value="musique">Musique YouTube</option>
-            <option value="bloups">Bloups et klaxon</option>
-            <option value="aucun">Aucun</option>
-          </select>
+        <label class="option">
+          <input id="option-son" type="checkbox" checked>
+          Bloups et klaxon
         </label>
-      </div>
-
-      <div id="lecteur" class="lecteur" hidden>
-        <div class="lecteur-cadre">
-          <div id="lecteur-youtube"></div>
-        </div>
-        <p id="etat-son" class="etat-son" role="status" aria-live="polite"></p>
       </div>
 
       <div class="actions">

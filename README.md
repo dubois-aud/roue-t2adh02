@@ -1,6 +1,6 @@
 # La roue T2Adh02, squad tout risques
 
-Roue de tirage au sort en HTML, CSS et JavaScript natifs. Aucune dépendance, aucune étape de build, trois fichiers à servir tels quels.
+Roue de tirage au sort en HTML, CSS et JavaScript natifs. Aucune dépendance, aucune étape de build, des fichiers statiques à servir tels quels.
 
 ## Utilisation
 
@@ -11,7 +11,7 @@ Ouvrir `index.html` dans un navigateur, ou servir le dossier par http.
 - supprimer définitivement un participant par la croix de sa ligne
 - lancer la roue par le bouton central, par un clic sur la roue, ou par la barre d'espace
 - `Mélanger` réordonne les secteurs, `Tout resélectionner` remet tout le monde dans la roue, `Tout effacer` vide la liste
-- deux options : désélection automatique du gagnant après le tirage, et choix du son
+- deux options : désélection automatique du gagnant après le tirage, et son de la roue
 
 ## Sélection des participants
 
@@ -24,42 +24,9 @@ L'option `Désélectionner le gagnant après le tirage` enchaîne les tirages sa
 
 ## Son
 
-Trois modes dans la liste `Son de la roue`, le choix est retenu dans le `localStorage` sous la clé `roue-des-noms.son`.
+Une case `Bloups et klaxon`, retenue dans le `localStorage` sous la clé `roue-des-noms.son`. Sons synthétisés avec l'API Web Audio, aucun fichier chargé : un bloup par secteur franchi, dont la hauteur suit la vitesse de la roue, et un klaxon de clown pour le gagnant. Décochée, la roue tourne en silence.
 
-- **Musique YouTube** : une piste tirée au hasard dans la playlist se lance au démarrage de la roue, puis descend en fondu à l'arrêt, suivie du klaxon d'annonce.
-- **Bloups et klaxon** : sons synthétisés avec l'API Web Audio, aucun fichier chargé. Un bloup par secteur franchi, dont la hauteur suit la vitesse de la roue, et un klaxon de clown pour le gagnant.
-- **Aucun** : silence complet.
-
-### Playlist
-
-L'identifiant est la constante `PLAYLIST` en tête de `script.js`. Il peut aussi être surchargé sans toucher au code par le paramètre `p` dans le fragment de l'URL, à côté de la liste des noms :
-
-```
-#l=Audrey~Amine~Jean-Philippe&p=PL...
-```
-
-La lecture passe par le lecteur officiel de YouTube (IFrame Player API), chargé à la demande, uniquement quand le mode musique est actif : aucune requête vers YouTube dans les deux autres modes. Le flux reste servi par YouTube, avec ses publicités et son décompte de vues, et aucun fichier audio n'est copié dans le dépôt.
-
-Conséquence de leurs règles d'intégration, le lecteur reste visible dans le panneau, au moins 200 pixels de côté. Un lecteur masqué serait hors des conditions d'utilisation.
-
-Replis prévus, tous silencieux du point de vue de l'utilisateur sauf un message :
-
-- API injoignable, bloquée par un filtrage réseau ou par un bloqueur : bascule automatique sur les bloups au bout de huit secondes
-- piste dont l'intégration est refusée par l'ayant droit (codes 101 et 150) : passage à une autre piste, trois tentatives
-- code 153, non documenté par YouTube, en pratique un refus d'intégration faute de référent valide : même relance, sauf en `file://` où il n'y a aucun référent, cas dans lequel la bascule sur les bloups est immédiate avec un message
-- playlist introuvable ou identifiant invalide (codes 2, 5 et 100) : bascule sur les bloups
-
-Constat de test, à connaître avant de reprendre le sujet : sur la playlist `PLLTgmcsZVRK4`, le lecteur répond « Le propriétaire de la vidéo a désactivé la lecture sur d'autres sites Web » (erreur 150). La piste `dTbaawNCJSc` a été essayée comme repli et donne le même refus, y compris dans une iframe nue reprenant le code d'intégration de YouTube, sans une ligne de ce projet. La restriction vient donc des ayants droit, pas du code, et rien ici ne peut la contourner.
-
-Conséquence : `VIDEO_SECOURS` est laissée à `null` et le mode musique bascule sur les bloups tant qu'aucune piste jouable n'est fournie.
-
-Pour vérifier si une piste candidate est intégrable, le menu de partage de YouTube ne prouve rien. La méthode fiable est de la charger dans une iframe nue : si elle affiche « Vidéo non disponible », elle ne servira dans aucun lecteur intégré. On peut aussi l'essayer sans toucher au code par le paramètre `v` de l'URL :
-
-```
-#l=Audrey~Amine&v=<identifiant>
-```
-
-La lecture est déclenchée dans le gestionnaire du clic ou de la touche qui lance la roue, ce que réclame la politique de lecture automatique des navigateurs. Au premier lancement, si le lecteur n'est pas encore prêt, un message invite à relancer la roue.
+Un mode musique adossé à une playlist YouTube a existé puis a été retiré : les ayants droit de la playlist de la squad refusent l'intégration hors de YouTube (erreur 150, reproduite dans une iframe nue, donc indépendante de ce code), ce qui laissait une trentaine de pour cent du fichier à gérer des replis pour une fonctionnalité qui ne jouait jamais.
 
 ## Persistance des noms
 
@@ -75,7 +42,7 @@ Au premier chargement, quand la clé n'existe pas encore, la roue est amorcée a
 
 ### Lien partageable
 
-La liste est aussi encodée dans le fragment de l'URL, sous la forme `#l=Audrey~Amine~Jean-Philippe` avec chaque nom passé à `encodeURIComponent`. Les désélectionnés suivent dans un second paramètre, `&d=Audrey`, et la playlist éventuelle dans un troisième, `&p=`. Le fragment est mis à jour à chaque modification via `history.replaceState`, sans polluer l'historique de navigation.
+La liste est aussi encodée dans le fragment de l'URL, sous la forme `#l=Audrey~Amine~Jean-Philippe` avec chaque nom passé à `encodeURIComponent`. Les désélectionnés suivent dans un second paramètre, `&d=Audrey`. Le fragment est mis à jour à chaque modification via `history.replaceState`, sans polluer l'historique de navigation.
 
 Le séparateur est le `~`, un caractère non réservé de la RFC 3986. Les premiers liens utilisaient le `|`, qui n'est pas valide dans une URL : selon le client, il ressortait en `%7C`, et la roue lisait alors un seul nom tronqué à 24 caractères, ou bien le lien était coupé au premier nom. Le `|` et le `%7C` restent acceptés à la lecture pour que les liens déjà envoyés continuent de fonctionner.
 
@@ -110,7 +77,6 @@ Deux points que l'hébergement change en mieux par rapport à une ouverture en `
 | Fichier | Rôle |
 | --- | --- |
 | `index.html` | structure de la page, roue en `canvas`, panneau des participants |
-| `style.css` | mise en page sombre et responsive, la roue passe sous le panneau en dessous de 860 px |
+| `style.css` | mise en page claire et responsive, ciel étoilé en fond, la roue passe sous le panneau en dessous de 860 px |
 | `script.js` | dessin de la roue, animation, liste, persistance, sons |
-
-Voir la section `Son` pour les trois modes et le paramétrage de la playlist.
+| `img/` | les huit licornes tirées au sort dans la fenêtre de résultat |

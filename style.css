@@ -373,53 +373,6 @@ input[type="checkbox"]:focus-visible {
 
 .option input { accent-color: var(--accent); }
 
-.option-choix { justify-content: space-between; gap: 12px; }
-
-.option select {
-  padding: 6px 8px;
-  border: 1px solid var(--bordure);
-  border-radius: 6px;
-  background: var(--fond-champ);
-  color: var(--texte);
-  font: inherit;
-  font-size: 0.85rem;
-  cursor: pointer;
-}
-
-/* Lecteur YouTube : visible et au moins 200 px de cote, comme l exigent
-   les regles d integration de YouTube. Pas de lecteur masque. */
-.lecteur { margin: 0 0 16px; }
-
-.lecteur-cadre {
-  position: relative;
-  width: 100%;
-  max-width: 100%;
-  aspect-ratio: 16 / 9;
-  min-height: 200px;
-  overflow: hidden;
-  border: 1px solid var(--bordure);
-  border-radius: 8px;
-  background: #000;
-}
-
-/* vaut pour le div remplace comme pour l iframe posee par l API YouTube :
-   celle-ci arrive avec ses propres attributs de taille, d ou le !important */
-.lecteur-cadre > * {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100% !important;
-  height: 100% !important;
-  border: 0;
-}
-
-.etat-son {
-  min-height: 1.2em;
-  margin: 8px 0 0;
-  font-size: 0.8rem;
-  color: var(--texte-doux);
-}
-
 .actions {
   display: grid;
   grid-template-columns: 1fr 1fr;

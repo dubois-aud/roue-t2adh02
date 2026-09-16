@@ -481,10 +481,13 @@ input[type="checkbox"]:focus-visible {
   margin: 12px 0 24px;
 }
 
+/* cadre carre impose : les images du dossier img n ont pas toutes le meme
+   format, object-fit les loge sans les deformer */
 .licorne {
   flex: 0 0 auto;
   width: clamp(52px, 16vw, 84px);
-  height: auto;
+  height: clamp(52px, 16vw, 84px);
+  object-fit: contain;
   filter: drop-shadow(0 4px 8px rgba(160, 105, 145, 0.35));
   animation: sautillement 2.8s ease-in-out infinite;
 }

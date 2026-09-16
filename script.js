@@ -23,6 +23,10 @@
     '#a56bff', '#ff7ab2', '#12b5a0', '#f0d000'
   ];
   var GRIS_INACTIF = '#cfc4d8';
+  var LICORNES = [
+    'img/konami_1.png', 'img/konami_2.png', 'img/konami_3.png', 'img/konami_4.png',
+    'img/konami_5.png', 'img/konami_6.png', 'img/konami_7.png', 'img/konami_8.png'
+  ];
   var TOUR_COMPLET = Math.PI * 2;
   var DUREE_MIN = 4200;
   var DUREE_MAX = 5800;
@@ -49,6 +53,8 @@
   var retourLien = document.getElementById('retour-lien');
   var fenetre = document.getElementById('fenetre');
   var fenetreNom = document.getElementById('fenetre-titre');
+  var licorneGauche = document.getElementById('licorne-gauche');
+  var licorneDroite = document.getElementById('licorne-droite');
   var fenetreDeselection = document.getElementById('fenetre-deselection');
   var fenetreFermer = document.getElementById('fenetre-fermer');
 
@@ -850,6 +856,10 @@
     // c est ce que reclame la politique de lecture automatique des navigateurs
     if (modeSon() === 'musique') { musiqueDemarrer(); }
 
+    // les licornes pesent lourd : la roue tourne plusieurs secondes, autant
+    // s en servir pour les charger avant que la fenetre les reclame
+    precharger();
+
     var secteur = TOUR_COMPLET / visibles.length;
     var depart = rotation;
     var duree = DUREE_MIN + Math.random() * (DUREE_MAX - DUREE_MIN);
@@ -914,8 +924,32 @@
     resultat.appendChild(fort);
 
     fenetreNom.textContent = gagnant;
+    tirerLicornes();
     fenetre.hidden = false;
     fenetreFermer.focus();
+  }
+
+  var licornesPrechargees = false;
+
+  function precharger() {
+    if (licornesPrechargees) { return; }
+    licornesPrechargees = true;
+
+    for (var i = 0; i < LICORNES.length; i++) {
+      var image = new Image();
+      image.src = LICORNES[i];
+    }
+  }
+
+  /* deux licornes differentes a chaque ouverture : on tire la seconde parmi
+     les places restantes, ce qui evite de retomber sur la premiere */
+  function tirerLicornes() {
+    var gauche = Math.floor(Math.random() * LICORNES.length);
+    var droite = Math.floor(Math.random() * (LICORNES.length - 1));
+    if (droite >= gauche) { droite += 1; }
+
+    licorneGauche.src = LICORNES[gauche];
+    licorneDroite.src = LICORNES[droite];
   }
 
   function fermerFenetre() {

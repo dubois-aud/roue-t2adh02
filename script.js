@@ -22,7 +22,7 @@
     '#e5484d', '#f5a524', '#3fb950', '#3b9eff',
     '#a56bff', '#ff7ab2', '#12b5a0', '#f0d000'
   ];
-  var GRIS_INACTIF = '#3a4152';
+  var GRIS_INACTIF = '#cfc4d8';
   var TOUR_COMPLET = Math.PI * 2;
   var DUREE_MIN = 4200;
   var DUREE_MAX = 5800;
@@ -337,12 +337,12 @@
         ? 'Ajoutez des participants'
         : 'Sélectionnez des participants';
 
-      ctx.fillStyle = '#171c28';
+      ctx.fillStyle = '#fdf3f8';
       ctx.beginPath();
       ctx.arc(centre, centre, rayon, 0, TOUR_COMPLET);
       ctx.fill();
 
-      ctx.fillStyle = '#98a1b8';
+      ctx.fillStyle = '#766a85';
       ctx.font = '600 ' + Math.round(taille * 0.038) + 'px "Segoe UI", Arial, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -363,7 +363,7 @@
       ctx.fillStyle = couleur(i, visibles.length);
       ctx.fill();
 
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
       ctx.lineWidth = 1.5;
       ctx.stroke();
 

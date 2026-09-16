@@ -1,14 +1,20 @@
 :root {
-  --fond: #10131c;
-  --fond-panneau: #1a1f2e;
-  --fond-champ: #111520;
-  --bordure: #2b3245;
-  --texte: #f2f4f8;
-  --texte-doux: #98a1b8;
-  --accent: #ffb703;
-  --accent-fonce: #e29500;
-  --danger: #e5484d;
+  --fond: #fff7fb;
+  --fond-panneau: #ffffff;
+  --fond-champ: #fdf3f8;
+  --bordure: #eed9e8;
+  --texte: #2c2336;
+  --texte-doux: #766a85;
+  --accent: #d81b7e;
+  --accent-fonce: #b3156a;
+  --accent-texte: #9c1160;
+  --or: #f5b301;
+  --danger: #d33a41;
   --rayon: 12px;
+
+  /* etoiles du fond : une seule forme SVG, deux teintes */
+  --etoile-or: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0c1 8 4 11 12 12-8 1-11 4-12 12-1-8-4-11-12-12 8-1 11-4 12-12z' fill='%23f5b301'/%3E%3C/svg%3E");
+  --etoile-rose: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0c1 8 4 11 12 12-8 1-11 4-12 12-1-8-4-11-12-12 8-1 11-4 12-12z' fill='%23ff77bd'/%3E%3C/svg%3E");
 }
 
 * { box-sizing: border-box; }
@@ -18,11 +24,56 @@ body {
   min-height: 100vh;
   padding: 32px 20px 48px;
   background:
-    radial-gradient(900px 500px at 20% -10%, #263049 0%, transparent 60%),
-    radial-gradient(700px 500px at 90% 10%, #2a2140 0%, transparent 55%),
+    radial-gradient(900px 500px at 20% -10%, #ffe9f4 0%, transparent 60%),
+    radial-gradient(700px 500px at 90% 10%, #fff4d6 0%, transparent 55%),
     var(--fond);
   color: var(--texte);
   font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Ciel etoile : deux couches posees derriere le contenu, qui scintillent
+   en decalage l une de l autre. Purement decoratif, jamais cliquable. */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-repeat: no-repeat;
+}
+
+body::before {
+  background-image:
+    var(--etoile-or), var(--etoile-or), var(--etoile-or), var(--etoile-or), var(--etoile-or),
+    var(--etoile-or), var(--etoile-or), var(--etoile-or), var(--etoile-or), var(--etoile-or);
+  background-position:
+    4% 12%, 12% 62%, 21% 30%, 33% 84%, 47% 8%,
+    58% 47%, 69% 22%, 78% 72%, 88% 38%, 95% 88%;
+  background-size:
+    22px 22px, 14px 14px, 10px 10px, 18px 18px, 12px 12px,
+    9px 9px, 16px 16px, 11px 11px, 24px 24px, 13px 13px;
+  filter: drop-shadow(0 0 6px rgba(245, 179, 1, 0.55));
+  animation: scintillement 3.4s ease-in-out infinite;
+}
+
+body::after {
+  background-image:
+    var(--etoile-rose), var(--etoile-rose), var(--etoile-rose), var(--etoile-rose), var(--etoile-rose),
+    var(--etoile-rose), var(--etoile-rose), var(--etoile-rose), var(--etoile-rose), var(--etoile-rose);
+  background-position:
+    7% 84%, 17% 8%, 27% 55%, 38% 26%, 44% 92%,
+    54% 68%, 63% 6%, 74% 44%, 84% 14%, 92% 60%;
+  background-size:
+    12px 12px, 18px 18px, 9px 9px, 14px 14px, 20px 20px,
+    11px 11px, 15px 15px, 10px 10px, 13px 13px, 17px 17px;
+  filter: drop-shadow(0 0 6px rgba(255, 119, 189, 0.55));
+  animation: scintillement 4.6s ease-in-out -1.7s infinite;
+}
+
+@keyframes scintillement {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
 }
 
 .visuellement-cache {
@@ -55,7 +106,7 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 3px;
-  color: var(--accent);
+  color: var(--accent-texte);
 }
 
 .accroche {
@@ -92,11 +143,11 @@ body {
   height: 100%;
   display: block;
   border-radius: 50%;
-  background: #0c0f16;
+  background: #fdf3f8;
   box-shadow:
-    0 0 0 10px #f7f9fc,
-    0 0 0 14px #cfd6e4,
-    0 24px 48px rgba(0, 0, 0, 0.45);
+    0 0 0 10px #ffffff,
+    0 0 0 14px #f6dcea,
+    0 20px 40px rgba(160, 105, 145, 0.25);
 }
 
 .fleche {
@@ -109,7 +160,7 @@ body {
   transform: translateX(-50%);
   background: var(--accent);
   clip-path: polygon(50% 100%, 0 0, 100% 0);
-  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.5));
+  filter: drop-shadow(0 3px 4px rgba(160, 105, 145, 0.45));
 }
 
 .bouton-centre {
@@ -120,10 +171,10 @@ body {
   width: 21%;
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
-  border: 4px solid #f7f9fc;
+  border: 4px solid #ffffff;
   border-radius: 50%;
-  background: linear-gradient(160deg, #ffffff, #dde3ee);
-  color: #1a1f2e;
+  background: linear-gradient(160deg, #ffffff, #ffe3f1);
+  color: var(--accent-texte);
   font: inherit;
   font-size: clamp(0.7rem, 1.7vw, 0.95rem);
   font-weight: 700;
@@ -131,7 +182,7 @@ body {
   letter-spacing: 0.5px;
   cursor: pointer;
   transition: transform 0.12s ease, box-shadow 0.2s ease;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 18px rgba(160, 105, 145, 0.35);
 }
 
 .bouton-centre:hover:not(:disabled) { transform: translate(-50%, -50%) scale(1.06); }
@@ -147,7 +198,7 @@ body {
 }
 
 .resultat strong {
-  color: var(--accent);
+  color: var(--accent-texte);
   font-size: 1.35rem;
 }
 
@@ -159,6 +210,7 @@ body {
   border: 1px solid var(--bordure);
   border-radius: var(--rayon);
   background: var(--fond-panneau);
+  box-shadow: 0 10px 30px rgba(160, 105, 145, 0.12);
 }
 
 .panneau h2 {
@@ -198,7 +250,7 @@ input[type="checkbox"]:focus-visible {
   padding: 10px 14px;
   border: 1px solid var(--bordure);
   border-radius: 8px;
-  background: #232a3c;
+  background: #fbeef5;
   color: var(--texte);
   font: inherit;
   font-weight: 600;
@@ -206,24 +258,24 @@ input[type="checkbox"]:focus-visible {
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 
-.bouton:hover { background: #2c3448; }
+.bouton:hover { background: #f5e0ed; }
 
 .bouton-primaire {
   border-color: var(--accent-fonce);
   background: var(--accent);
-  color: #1a1400;
+  color: #ffffff;
 }
 
-.bouton-primaire:hover { background: #ffc333; }
+.bouton-primaire:hover { background: var(--accent-fonce); }
 
-.bouton-danger { color: #ff9ea1; }
+.bouton-danger { color: #b02a31; }
 .bouton-danger:hover { border-color: var(--danger); }
 
 .erreur {
   min-height: 1.2em;
   margin: 8px 0 0;
   font-size: 0.85rem;
-  color: #ff9ea1;
+  color: #b02a31;
 }
 
 .liste-noms {
@@ -239,7 +291,7 @@ input[type="checkbox"]:focus-visible {
   align-items: center;
   gap: 6px;
   padding: 8px 4px 8px 0;
-  border-bottom: 1px solid #232a3c;
+  border-bottom: 1px solid #f4e4ee;
 }
 
 .choix {
@@ -293,8 +345,8 @@ input[type="checkbox"]:focus-visible {
 }
 
 .retirer:hover {
-  background: rgba(229, 72, 77, 0.15);
-  color: #ff9ea1;
+  background: rgba(211, 58, 65, 0.12);
+  color: #b02a31;
 }
 
 .vide {
@@ -381,7 +433,7 @@ input[type="checkbox"]:focus-visible {
   margin: 8px 0 0;
   font-size: 0.85rem;
   text-align: center;
-  color: var(--accent);
+  color: var(--accent-texte);
 }
 
 /* Fenetre de resultat */
@@ -394,7 +446,7 @@ input[type="checkbox"]:focus-visible {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: rgba(8, 10, 16, 0.72);
+  background: rgba(78, 42, 70, 0.38);
   animation: apparition 0.18s ease;
 }
 
@@ -402,13 +454,13 @@ input[type="checkbox"]:focus-visible {
 [hidden] { display: none !important; }
 
 .fenetre-boite {
-  width: min(100%, 400px);
+  width: min(100%, 480px);
   padding: 28px;
   border: 1px solid var(--bordure);
   border-radius: 16px;
   background: var(--fond-panneau);
   text-align: center;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 30px 60px rgba(120, 70, 110, 0.3);
   animation: montee 0.24s ease;
 }
 
@@ -420,11 +472,36 @@ input[type="checkbox"]:focus-visible {
   font-size: 0.75rem;
 }
 
-.fenetre-nom {
+/* le nom encadre par ses deux licornes */
+.fenetre-vedette {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   margin: 12px 0 24px;
-  font-size: clamp(1.6rem, 6vw, 2.2rem);
+}
+
+.licorne {
+  flex: 0 0 auto;
+  width: clamp(52px, 16vw, 84px);
+  height: auto;
+  filter: drop-shadow(0 4px 8px rgba(160, 105, 145, 0.35));
+  animation: sautillement 2.8s ease-in-out infinite;
+}
+
+/* celle de gauche est retournee pour regarder vers le nom */
+.licorne-gauche {
+  transform: scaleX(-1);
+  animation-delay: -1.4s;
+}
+
+.fenetre-nom {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: clamp(1.4rem, 5vw, 2.1rem);
   font-weight: 700;
-  color: var(--accent);
+  color: var(--accent-texte);
   overflow-wrap: anywhere;
 }
 
@@ -439,6 +516,20 @@ input[type="checkbox"]:focus-visible {
 @keyframes montee {
   from { opacity: 0; transform: translateY(12px) scale(0.96); }
   to { opacity: 1; transform: none; }
+}
+/* la propriete translate plutot que transform : la licorne de gauche
+   garde son miroir pendant qu elle sautille */
+@keyframes sautillement {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -6px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  body::after,
+  .licorne {
+    animation: none;
+  }
 }
 
 @media (max-width: 860px) {
